@@ -1,5 +1,6 @@
-module LetterAvatar
-  module Colors
+# frozen_string_literal: true
+class LetterAvatarSimple
+  class Colors
     PALETTES = [:google, :iwanthue, :custom]
 
     GOOGLE_COLORS = [
@@ -251,7 +252,7 @@ module LetterAvatar
     ].freeze
 
     def self.for(username)
-      public_send("with_#{LetterAvatar.colors_palette}", username)
+      public_send("with_#{LetterAvatarSimple.colors_palette}", username)
     end
 
     def self.with_iwanthue(username)
@@ -274,18 +275,18 @@ module LetterAvatar
       end
     end
 
-		def self.with_custom(username)
-			custom_palette = LetterAvatar.custom_palette
-			custom_palette[Digest::MD5.hexdigest(username)[0...15].to_i(16) % custom_palette.length]
-		end
-		
-		def self.valid_custom_palette?(palette)
-			return false unless palette.is_a?(Array)
-			return palette.all? do |color| 
-				false unless color.is_a?(Array)
-				color.all? { |i| i.is_a?(Integer) }
-			end
-		end
+    def self.with_custom(username)
+      custom_palette = LetterAvatarSimple.custom_palette
+      custom_palette[Digest::MD5.hexdigest(username)[0...15].to_i(16) % custom_palette.length]
+    end
+    
+    def self.valid_custom_palette?(palette)
+      return false unless palette.is_a?(Array)
+      return palette.all? do |color| 
+        false unless color.is_a?(Array)
+        color.all? { |i| i.is_a?(Integer) }
+      end
+    end
 
     # Colors form Google Inbox
     # https://inbox.google.com
