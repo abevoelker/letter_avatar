@@ -1,21 +1,21 @@
 # LetterAvatarSimple
 
-Forked from [letter_avatar](https://github.com/ksz2k/letter_avatar), which was
-in turn was extracted from [Discourse](https://www.discourse.org/).
+Forked from [letter_avatar][], which was
+in turn was extracted from [Discourse][].
 
-Compared to letter_avatar, this gem:
+Compared to [letter_avatar][], this gem:
   * Outputs `StringIO` binary data by default instead of writing files to
     the `public` directory (but can write to temp files too) so you can use
-    [shrine](https://github.com/shrinerb/shrine) or similar gems easier
-  * Uses [minimagick](https://github.com/minimagick/minimagick) instead of
+    [shrine][] or similar gems easier
+  * Uses [minimagick][] instead of
     homegrown ImageMagick shell execution
   * Supports keyword arguments for generating each image (don't need to edit
     global config or constants)
   * Simplifies custom palette loading and supports multiple custom palettes
   * Does **not** come with model, view, or controller helpers (you should
-    be using [shrine]((https://github.com/shrinerb/shrine)))
+    be using [shrine][])
   * Does **not** do caching (you should be using
-    [shrine]((https://github.com/shrinerb/shrine)))
+    [shrine][])
 
 ## Examples
 
@@ -96,10 +96,10 @@ choosing the color used for a given username's initials:
 looks at the first letter of the username, and they both start with "k".
 
 `:i_want_hue` meanwhile calculates the MD5 digest of the username to select
-the color, so it's likely that two usernames with the same initial(s) will
-get different colors.
+the color, so it's likely that two different usernames with the same initial(s)
+will  different colors.
 
-#### Custom palettes
+### Custom palettes
 
 You can add your own custom palette:
 
@@ -124,3 +124,8 @@ end
 
 LetterAvatarSimple.generate_file("foobar", palette: :my_palette)
 ```
+
+[letter_avatar]: https://github.com/ksz2k/letter_avatar
+[minimagick]: https://github.com/minimagick/minimagick
+[shrine]: https://github.com/shrinerb/shrine
+[Discourse]: https://www.discourse.org/
