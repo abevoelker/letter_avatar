@@ -1,6 +1,8 @@
 # LetterAvatarSimple
 
-Generate letter image avatars based on user initials:
+Generate letter image avatars based on user initials.
+
+## Usage
 
 ```ruby
 LetterAvatarSimple.generate("foobar")
@@ -9,12 +11,79 @@ LetterAvatarSimple.generate("foobar")
 
 <img src="./examples/readme/F.png" alt='Image of letter "F"' width="64" height="64" />
 
+We can do multiple letters:
+
 ```ruby
 LetterAvatarSimple.generate("Dallas Smith")
 # => #<StringIO:0x000055b380e6a058>
 ```
 
 <img src="./examples/readme/DS.png" alt='Image of letters "DS"' width="64" height="64" />
+
+We can save to a file:
+
+```ruby
+LetterAvatarSimple.generate_file("Dallas Smith")
+# => #<File:/tmp/x20190527-19344-79m629.png>
+
+LetterAvatarSimple.generate_file("Dallas Smith", filename: "/tmp/dallas.png")
+# => #<File:/tmp/dallas.png>
+```
+
+We can specify the initials using `LetterAvatarSimple::Identity`:
+
+```ruby
+i = LetterAvatarSimple::Identity.new("ZZ", "Dallas Smith")
+LetterAvatarSimple.generate(i)
+```
+
+<img src="./examples/readme/ZZ-1.png" alt='Image of letters "ZZ" in green' width="64" height="64" />
+
+Image color is chosen from a palette based on username, so the same initials
+will (most likely) not share the same color:
+
+```ruby
+i = LetterAvatarSimple::Identity.new("ZZ", "foobar")
+LetterAvatarSimple.generate(i)
+```
+
+<img src="./examples/readme/ZZ-2.png" alt='Image of letters "ZZ" in pink' width="64" height="64" />
+
+The default palette is based on Google Inbox. You can change palettes:
+
+```ruby
+LetterAvatarSimple.generate("foobar", palette: :i_want_hue)
+```
+
+<img src="./examples/readme/F-i_want_hue.png" alt='Image of letter "F"' width="64" height="64" />
+
+Or skip the palette feature and provide the desired color directly, in RGB tuple format:
+
+```ruby
+LetterAvatarSimple.generate("foobar", color: [255,0,0])
+```
+
+<img src="./examples/readme/F-red.png" alt='Image of letter "F"' width="64" height="64" />
+
+Other options that can be provided to customize image generation:
+
+```ruby
+LetterAvatarSimple.generate(
+  "foobar",
+  size: 256,                            # => default 1024
+  palette: :i_want_hue,                 # => default :google
+  # warning: this bypasses the palette's color selection
+  color: [255, 0, 0]                    # => default nil
+  pointsize: 150,                       # => default 600
+  font: "/tmp/path/to/font/file",       # => default is path to included Roboto font
+  weight: 500,                          # => default 300
+  fill_color: "rgba(255, 255, 255, 1)", # => default "rgba(255, 255, 255, 0.65)"
+  annotate_position: "-0+10",           # => default "-0+5"
+  filename: "/tmp/foo.png",             # => default is randomly generated tempfile path
+)
+```
+
+## About
 
 Forked from [letter_avatar][], which was in turn extracted from [Discourse][].
 
@@ -30,47 +99,6 @@ Compared to [letter_avatar][], this gem:
     be using [shrine][])
   * Does **not** do caching (you should be using [shrine][])
 
-## Examples
-
-#### Google's Inbox Palette
-
-<img src="https://cloud.githubusercontent.com/assets/5518/13031513/43eefa76-d30b-11e5-8f06-85f8eb2a4fb6.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031514/43ef6d8a-d30b-11e5-9fbc-38ae526b56b3.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031517/43f0da12-d30b-11e5-8fef-6c7daf235a54.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031515/43f0568c-d30b-11e5-95c5-1653361d4443.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031512/43eebcc8-d30b-11e5-9f95-0093bfadd182.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031516/43f0d0bc-d30b-11e5-8822-f01a6a138ff8.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031519/44382430-d30b-11e5-96e4-bcd7ce5eb155.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031518/44378d04-d30b-11e5-9400-55ff46b94cbe.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031521/443a03cc-d30b-11e5-8467-9592e9dbb2ae.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031523/443badc6-d30b-11e5-9d72-45613018cab4.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031520/44394e14-d30b-11e5-966c-2eada89295c9.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031522/443a71fe-d30b-11e5-88f4-37d1fd220abb.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031525/44752b1e-d30b-11e5-8290-ed8888055e64.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031524/4471cef6-d30b-11e5-9f4c-004f993dd27b.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031526/4475a990-d30b-11e5-8be3-c8f4482dee03.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031527/44772482-d30b-11e5-92f0-b9190c312d70.png" width="60" /> <img src="https://cloud.githubusercontent.com/assets/5518/13031528/447804ce-d30b-11e5-8002-9424d5474ddb.png" width="60" />
-
-## Usage
-
-```ruby
-# Generates an "F" avatar:
-LetterAvatarSimple.generate("foobar")
-# => #<StringIO:0x000055b3804948a8>
-
-# Generates a "DS" avatar:
-LetterAvatarSimple.generate("Dallas Smith")
-# => #<StringIO:0x000055b380e6a058>
-
-# Generates a "DS" avatar to file:
-LetterAvatarSimple.generate_file("Dallas Smith")
-# => #<File:/tmp/x20190527-19344-79m629.png>
-
-# You can specify the letters yourself directly if necessary by creating a
-# LetterAvatarSimple::Identity. The username will be hashed by certain color
-# palettes to make color choice different between users with the same initials
-i = LetterAvatarSimple::Identity.new("ZZ", "Dallas Smith")
-LetterAvatarSimple.generate(i)
-
-# Other options that can be provided:
-LetterAvatarSimple.generate(
-  "foobar",
-  size: 256,                            # => default 1024
-  palette: :i_want_hue,                 # => default :google
-  pointsize: 150,                       # => default 600
-  font: "/tmp/path/to/font/file",       # => default is path to included Roboto font
-  weight: 500,                          # => default 300
-  fill_color: "rgba(255, 255, 255, 1)", # => default "rgba(255, 255, 255, 0.65)"
-  annotate_position: "-0+10",           # => default "-0+5"
-  filename: "/tmp/foo.png",             # => default is randomly generated tempfile path
-)
-```
-
 ## Installation
 
 ```ruby
@@ -82,23 +110,7 @@ gem "letter_avatar_simple"
 ImageMagick or GraphicsMagick - see
 [MiniMagick requirements](https://github.com/minimagick/minimagick#requirements)
 
-## Configuration
-
-The same options that can be passed to `generate` can be set as global defaults:
-
-```ruby
-LetterAvatarSimple.config do |config|
-  config.size              = 256
-  config.palette           = :i_want_hue
-  config.pointsize         = 150
-  config.font              = "/tmp/path/to/font/file"
-  config.weight            = 500
-  config.fill_color        = "rgba(255, 255, 255, 1)"
-  config.annotate_position = "-0+10"
-end
-```
-
-### Color palette
+## Color palettes
 
 Two color palettes are provided by default: `:google` and `:i_want_hue`
 
@@ -109,6 +121,140 @@ with different colors.
 If you need the same initials to always render with the same color, simply
 provide a custom palette using a customized `letter_color` method. See below
 for an example.
+
+### `:google` - Google Inbox palette
+
+<!--
+alphabet = ("A".."Z").cycle
+
+pairs = LetterAvatarSimple::Palettes::Google::PALETTE.zip(alphabet)
+
+pairs.each do |color,letter|
+  filename = "./examples/readme/google-palette/#{letter}.png"
+  LetterAvatarSimple.generate_file(
+    letter,
+    color: color,
+    filename: filename,
+    size: 64,
+    pointsize: 37.5,
+    annotate_position: "-0+0"
+  )
+end
+-->
+
+<img src="./examples/readme/google-palette/A.png" alt='Image of letter "A"' width="64" height="64" />
+<img src="./examples/readme/google-palette/B.png" alt='Image of letter "B"' width="64" height="64" />
+<img src="./examples/readme/google-palette/C.png" alt='Image of letter "C"' width="64" height="64" />
+<img src="./examples/readme/google-palette/D.png" alt='Image of letter "D"' width="64" height="64" />
+<img src="./examples/readme/google-palette/E.png" alt='Image of letter "E"' width="64" height="64" />
+<img src="./examples/readme/google-palette/F.png" alt='Image of letter "F"' width="64" height="64" />
+<img src="./examples/readme/google-palette/G.png" alt='Image of letter "G"' width="64" height="64" />
+<img src="./examples/readme/google-palette/H.png" alt='Image of letter "H"' width="64" height="64" />
+<img src="./examples/readme/google-palette/I.png" alt='Image of letter "I"' width="64" height="64" />
+<img src="./examples/readme/google-palette/J.png" alt='Image of letter "J"' width="64" height="64" />
+<img src="./examples/readme/google-palette/K.png" alt='Image of letter "K"' width="64" height="64" />
+<img src="./examples/readme/google-palette/L.png" alt='Image of letter "L"' width="64" height="64" />
+<img src="./examples/readme/google-palette/M.png" alt='Image of letter "M"' width="64" height="64" />
+<img src="./examples/readme/google-palette/N.png" alt='Image of letter "N"' width="64" height="64" />
+<img src="./examples/readme/google-palette/O.png" alt='Image of letter "O"' width="64" height="64" />
+<img src="./examples/readme/google-palette/P.png" alt='Image of letter "P"' width="64" height="64" />
+<img src="./examples/readme/google-palette/Q.png" alt='Image of letter "Q"' width="64" height="64" />
+<img src="./examples/readme/google-palette/R.png" alt='Image of letter "R"' width="64" height="64" />
+<img src="./examples/readme/google-palette/S.png" alt='Image of letter "S"' width="64" height="64" />
+<img src="./examples/readme/google-palette/T.png" alt='Image of letter "T"' width="64" height="64" />
+<img src="./examples/readme/google-palette/U.png" alt='Image of letter "U"' width="64" height="64" />
+<img src="./examples/readme/google-palette/V.png" alt='Image of letter "V"' width="64" height="64" />
+<img src="./examples/readme/google-palette/W.png" alt='Image of letter "W"' width="64" height="64" />
+<img src="./examples/readme/google-palette/X.png" alt='Image of letter "X"' width="64" height="64" />
+<img src="./examples/readme/google-palette/Y.png" alt='Image of letter "Y"' width="64" height="64" />
+<img src="./examples/readme/google-palette/Z.png" alt='Image of letter "Z"' width="64" height="64" />
+
+### `:i_want_hue` - [iWantHue][] palette
+
+<!--
+alphabet = ("A".."Z").cycle
+
+pairs = LetterAvatarSimple::Palettes::IWantHue::PALETTE.zip(alphabet)
+
+f = File.open("/tmp/i_want_hue.txt", "w")
+pairs.each_with_index do |(color,letter),i|
+  filename = "./examples/readme/i_want_hue-palette/#{i}-#{letter}.png"
+  LetterAvatarSimple.generate_file(
+    letter,
+    color: color,
+    filename: filename,
+    size: 64,
+    pointsize: 37.5,
+    annotate_position: "-0+0"
+  )
+  f.puts <<~HTML
+    <img src="#{filename}" alt='Image of letter "#{letter}"' width="64" height="64" />
+  HTML
+end
+f.close
+-->
+
+<img src="./examples/readme/i_want_hue-palette/0-A.png" alt='Image of letter "A"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/1-B.png" alt='Image of letter "B"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/2-C.png" alt='Image of letter "C"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/3-D.png" alt='Image of letter "D"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/4-E.png" alt='Image of letter "E"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/5-F.png" alt='Image of letter "F"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/6-G.png" alt='Image of letter "G"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/7-H.png" alt='Image of letter "H"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/8-I.png" alt='Image of letter "I"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/9-J.png" alt='Image of letter "J"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/10-K.png" alt='Image of letter "K"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/11-L.png" alt='Image of letter "L"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/12-M.png" alt='Image of letter "M"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/13-N.png" alt='Image of letter "N"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/14-O.png" alt='Image of letter "O"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/15-P.png" alt='Image of letter "P"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/16-Q.png" alt='Image of letter "Q"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/17-R.png" alt='Image of letter "R"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/18-S.png" alt='Image of letter "S"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/19-T.png" alt='Image of letter "T"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/20-U.png" alt='Image of letter "U"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/21-V.png" alt='Image of letter "V"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/22-W.png" alt='Image of letter "W"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/23-X.png" alt='Image of letter "X"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/24-Y.png" alt='Image of letter "Y"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/25-Z.png" alt='Image of letter "Z"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/26-A.png" alt='Image of letter "A"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/27-B.png" alt='Image of letter "B"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/28-C.png" alt='Image of letter "C"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/29-D.png" alt='Image of letter "D"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/30-E.png" alt='Image of letter "E"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/31-F.png" alt='Image of letter "F"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/32-G.png" alt='Image of letter "G"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/33-H.png" alt='Image of letter "H"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/34-I.png" alt='Image of letter "I"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/35-J.png" alt='Image of letter "J"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/36-K.png" alt='Image of letter "K"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/37-L.png" alt='Image of letter "L"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/38-M.png" alt='Image of letter "M"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/39-N.png" alt='Image of letter "N"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/40-O.png" alt='Image of letter "O"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/41-P.png" alt='Image of letter "P"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/42-Q.png" alt='Image of letter "Q"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/43-R.png" alt='Image of letter "R"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/44-S.png" alt='Image of letter "S"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/45-T.png" alt='Image of letter "T"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/46-U.png" alt='Image of letter "U"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/47-V.png" alt='Image of letter "V"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/48-W.png" alt='Image of letter "W"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/49-X.png" alt='Image of letter "X"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/50-Y.png" alt='Image of letter "Y"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/51-Z.png" alt='Image of letter "Z"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/52-A.png" alt='Image of letter "A"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/53-B.png" alt='Image of letter "B"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/54-C.png" alt='Image of letter "C"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/55-D.png" alt='Image of letter "D"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/56-E.png" alt='Image of letter "E"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/57-F.png" alt='Image of letter "F"' width="64" height="64" />
+<img src="./examples/readme/i_want_hue-palette/58-G.png" alt='Image of letter "G"' width="64" height="64" />
+... <a href="./examples/readme/i_want_hue-palette">and 157 more!</a>
+</details>
 
 ### Custom palettes
 
@@ -140,7 +286,25 @@ end
 LetterAvatarSimple.generate_file("foobar", palette: :my_palette)
 ```
 
+## Configuration
+
+The same options that can be passed to `generate` can be set as global defaults:
+
+```ruby
+LetterAvatarSimple.config do |config|
+  config.size              = 256
+  config.palette           = :i_want_hue
+  config.color             = [255, 0, 0]
+  config.pointsize         = 150
+  config.font              = "/tmp/path/to/font/file"
+  config.weight            = 500
+  config.fill_color        = "rgba(255, 255, 255, 1)"
+  config.annotate_position = "-0+10"
+end
+```
+
 [letter_avatar]: https://github.com/ksz2k/letter_avatar
 [minimagick]: https://github.com/minimagick/minimagick
 [shrine]: https://github.com/shrinerb/shrine
 [Discourse]: https://www.discourse.org/
+[iWantHue]: http://tools.medialab.sciences-po.fr/iwanthue/index.php

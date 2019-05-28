@@ -29,6 +29,7 @@ class LetterAvatarSimple
 
     opts = {
       palette: kwargs[:palette] || LetterAvatarSimple.palette,
+      color: kwargs[:color] || LetterAvatarSimple.color,
       size: kwargs[:size] || LetterAvatarSimple.size,
       pointsize: kwargs[:pointsize] || LetterAvatarSimple.pointsize,
       font: kwargs[:font] || LetterAvatarSimple.font,
@@ -38,7 +39,7 @@ class LetterAvatarSimple
     }
 
     filename = kwargs[:filename] || generate_temp_filename
-    color = LetterAvatarSimple.palettes.fetch(opts.fetch(:palette)).letter_color(identity)
+    color = opts[:color] || LetterAvatarSimple.palettes.fetch(opts.fetch(:palette)).letter_color(identity)
     MiniMagick::Tool::Convert.new do |x|
       x.size "#{opts.fetch(:size)}x#{opts.fetch(:size)}"
       x << "xc:#{to_rgb(color)}"

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class LetterAvatarSimple
   module Configuration
+    attr_accessor :color
     attr_writer :size, :fill_color, :font, :palette, :weight,
       :annotate_position, :pointsize
 
