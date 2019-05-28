@@ -5,7 +5,7 @@ class LetterAvatarSimple
       :annotate_position, :pointsize
 
     def size
-      @size || 600
+      @size || 1024
     end
 
     def fill_color
@@ -29,7 +29,7 @@ class LetterAvatarSimple
     end
 
     def pointsize
-      @pointsize ||= 140
+      @pointsize ||= 600
     end
   end
 end

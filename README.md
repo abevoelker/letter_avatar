@@ -47,9 +47,9 @@ LetterAvatarSimple.generate(i)
 # Other options that can be provided:
 LetterAvatarSimple.generate(
   "foobar",
-  size: 256,                            # => default 600
+  size: 256,                            # => default 1024
   palette: :i_want_hue,                 # => default :google
-  pointsize: 70,                        # => default 140
+  pointsize: 150,                       # => default 600
   font: "/tmp/path/to/font/file",       # => default is path to included Roboto font
   weight: 500,                          # => default 300
   fill_color: "rgba(255, 255, 255, 1)", # => default "rgba(255, 255, 255, 0.65)"
@@ -77,7 +77,7 @@ The same options that can be passed to `generate` can be set as global defaults:
 LetterAvatarSimple.config do |config|
   config.size              = 256
   config.palette           = :i_want_hue
-  config.pointsize         = 70
+  config.pointsize         = 150
   config.font              = "/tmp/path/to/font/file"
   config.weight            = 500
   config.fill_color        = "rgba(255, 255, 255, 1)"
