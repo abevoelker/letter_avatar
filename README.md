@@ -156,6 +156,7 @@ pairs.each do |color,letter|
 end
 -->
 
+<div>
 <img src="./examples/readme/google-palette/A.png" alt='Image of letter "A"' width="64" height="64" />
 <img src="./examples/readme/google-palette/B.png" alt='Image of letter "B"' width="64" height="64" />
 <img src="./examples/readme/google-palette/C.png" alt='Image of letter "C"' width="64" height="64" />
@@ -182,6 +183,7 @@ end
 <img src="./examples/readme/google-palette/X.png" alt='Image of letter "X"' width="64" height="64" />
 <img src="./examples/readme/google-palette/Y.png" alt='Image of letter "Y"' width="64" height="64" />
 <img src="./examples/readme/google-palette/Z.png" alt='Image of letter "Z"' width="64" height="64" />
+</div>
 
 ### `:i_want_hue` - [iWantHue][] palette
 
@@ -208,6 +210,7 @@ end
 f.close
 -->
 
+<div>
 <img src="./examples/readme/i_want_hue-palette/0-A.png" alt='Image of letter "A"' width="64" height="64" />
 <img src="./examples/readme/i_want_hue-palette/1-B.png" alt='Image of letter "B"' width="64" height="64" />
 <img src="./examples/readme/i_want_hue-palette/2-C.png" alt='Image of letter "C"' width="64" height="64" />
@@ -268,7 +271,7 @@ f.close
 <img src="./examples/readme/i_want_hue-palette/57-F.png" alt='Image of letter "F"' width="64" height="64" />
 <img src="./examples/readme/i_want_hue-palette/58-G.png" alt='Image of letter "G"' width="64" height="64" />
 ... <a href="./examples/readme/i_want_hue-palette">and 157 more!</a>
-</details>
+</div>
 
 ### Custom palettes
 
