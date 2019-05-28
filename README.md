@@ -11,6 +11,8 @@ LetterAvatarSimple.generate("foobar")
 
 <img src="./examples/readme/F.png" alt='Image of letter "F"' width="64" height="64" />
 
+------------
+
 We can do multiple letters:
 
 ```ruby
@@ -19,6 +21,8 @@ LetterAvatarSimple.generate("Dallas Smith")
 ```
 
 <img src="./examples/readme/DS.png" alt='Image of letters "DS"' width="64" height="64" />
+
+------------
 
 We can save to a file:
 
@@ -30,6 +34,8 @@ LetterAvatarSimple.generate_file("Dallas Smith", filename: "/tmp/dallas.png")
 # => #<File:/tmp/dallas.png>
 ```
 
+------------
+
 We can specify the initials using `LetterAvatarSimple::Identity`:
 
 ```ruby
@@ -38,6 +44,8 @@ LetterAvatarSimple.generate(i)
 ```
 
 <img src="./examples/readme/ZZ-1.png" alt='Image of letters "ZZ" in green' width="64" height="64" />
+
+------------
 
 Image color is chosen from a palette based on username, so the same initials
 will (most likely) not share the same color:
@@ -49,6 +57,8 @@ LetterAvatarSimple.generate(i)
 
 <img src="./examples/readme/ZZ-2.png" alt='Image of letters "ZZ" in pink' width="64" height="64" />
 
+------------
+
 The default palette is based on Google Inbox. You can change palettes:
 
 ```ruby
@@ -57,6 +67,8 @@ LetterAvatarSimple.generate("foobar", palette: :i_want_hue)
 
 <img src="./examples/readme/F-i_want_hue.png" alt='Image of letter "F"' width="64" height="64" />
 
+------------
+
 Or skip the palette feature and provide the desired color directly, in RGB tuple format:
 
 ```ruby
@@ -64,6 +76,8 @@ LetterAvatarSimple.generate("foobar", color: [255,0,0])
 ```
 
 <img src="./examples/readme/F-red.png" alt='Image of letter "F"' width="64" height="64" />
+
+------------
 
 Other options that can be provided to customize image generation:
 
