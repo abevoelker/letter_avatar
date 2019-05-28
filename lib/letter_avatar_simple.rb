@@ -1,35 +1,53 @@
 # frozen_string_literal: true
-require "letter_avatar_simple/version"
 require "letter_avatar_simple/configuration"
-require "letter_avatar_simple/colors"
 require "letter_avatar_simple/identity"
+require "letter_avatar_simple/palette"
+require "letter_avatar_simple/version"
 require "fileutils"
 require "mini_magick"
 require "tmpdir"
 
 class LetterAvatarSimple
   extend Configuration
-  DEFAULT_SIZE = 600
 
   def self.config(&blk)
     yield(self)
   end
 
-  def self.generate(identity, size: DEFAULT_SIZE, output: :string)
+  def self.palettes
+    @palettes
+  end
+
+  def self.palettes=(h)
+    @palettes = h
+  end
+
+  def self.generate(identity, output: :string, **kwargs)
     if identity.is_a?(String)
       identity = Identity.from_username(identity)
     end
 
-    filename = generate_temp_filename
+    opts = {
+      palette: kwargs[:palette] || LetterAvatarSimple.palette,
+      size: kwargs[:size] || LetterAvatarSimple.size,
+      pointsize: kwargs[:pointsize] || LetterAvatarSimple.pointsize,
+      font: kwargs[:font] || LetterAvatarSimple.font,
+      weight: kwargs[:weight] || LetterAvatarSimple.weight,
+      fill_color: kwargs[:fill_color] || LetterAvatarSimple.fill_color,
+      annotate_position: kwargs[:annotate_position] || LetterAvatarSimple.annotate_position,
+    }
+
+    filename = kwargs[:filename] || generate_temp_filename
+    color = LetterAvatarSimple.palettes.fetch(opts.fetch(:palette)).letter_color(identity)
     MiniMagick::Tool::Convert.new do |x|
-      x.size "#{size.to_i}x#{size.to_i}"
-      x << "xc:#{to_rgb(identity.color)}"
-      x.pointsize LetterAvatarSimple.pointsize
-      x.font LetterAvatarSimple.font
-      x.weight LetterAvatarSimple.weight
-      x.fill LetterAvatarSimple.fill_color
+      x.size "#{opts.fetch(:size)}x#{opts.fetch(:size)}"
+      x << "xc:#{to_rgb(color)}"
+      x.pointsize opts.fetch(:pointsize)
+      x.font opts.fetch(:font)
+      x.weight opts.fetch(:weight)
+      x.fill opts.fetch(:fill_color)
       x.gravity "Center"
-      x.annotate(LetterAvatarSimple.annotate_position, identity.letters)
+      x.annotate(opts.fetch(:annotate_position), identity.letters)
       x << filename
     end
 
@@ -62,3 +80,10 @@ class LetterAvatarSimple
     File.join(Dir.tmpdir, filename)
   end
 end
+
+require "letter_avatar_simple/palettes/google"
+require "letter_avatar_simple/palettes/i_want_hue"
+LetterAvatarSimple.palettes = {
+  google: LetterAvatarSimple::Palettes::Google.new,
+  i_want_hue: LetterAvatarSimple::Palettes::IWantHue.new,
+}

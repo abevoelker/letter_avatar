@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 class LetterAvatarSimple
   class Identity
-    attr_accessor :color, :letters
+    attr_accessor :letters, :id
 
     def initialize(letters, id)
       @letters = letters
-      @color = ::LetterAvatarSimple::Colors.for(id)
+      @id = id
     end
 
     def self.from_username(username)
+      # "john smith" => "JS"
       letters = username.split(/\s+/).map{|word| word[0].upcase}.join('')
       new(letters, username)
     end

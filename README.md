@@ -1,16 +1,21 @@
 # LetterAvatarSimple
 
-Forked from [`letter_avatar`](https://github.com/ksz2k/letter_avatar), which was
+Forked from [letter_avatar](https://github.com/ksz2k/letter_avatar), which was
 in turn was extracted from [Discourse](https://www.discourse.org/).
 
-Compared to `letter_avatar`, this gem:
+Compared to letter_avatar, this gem:
   * Outputs `StringIO` binary data by default instead of writing files to
     the `public` directory (but can write to temp files too) so you can use
     [shrine](https://github.com/shrinerb/shrine) or similar gems easier
   * Uses [minimagick](https://github.com/minimagick/minimagick) instead of
     homegrown ImageMagick shell execution
-  * Doesn't come with model, view, or controller helpers
-  * Doesn't do caching
+  * Supports keyword arguments for generating each image (don't need to edit
+    global config or constants)
+  * Simplifies custom palette loading and supports multiple custom palettes
+  * Does **not** come with model, view, or controller helpers (you should
+    be using [shrine]((https://github.com/shrinerb/shrine)))
+  * Does **not** do caching (you should be using
+    [shrine]((https://github.com/shrinerb/shrine)))
 
 ## Examples
 
@@ -21,27 +26,36 @@ Compared to `letter_avatar`, this gem:
 ## Usage
 
 ```ruby
-# generates an "F" avatar:
+# Generates an "F" avatar:
 LetterAvatarSimple.generate("foobar")
-=> #<StringIO:0x000055b3804948a8>
+# => #<StringIO:0x000055b3804948a8>
 
-# generates an "F" avatar to file:
-LetterAvatarSimple.generate_file("foobar")
-=> #<File:/tmp/x20190527-19344-79m629.png>
-
-# generates a "JS" avatar to file:
+# Generates a "JS" avatar:
 LetterAvatarSimple.generate("John Smith")
-=> #<StringIO:0x000055b380e6a058>
+# => #<StringIO:0x000055b380e6a058>
 
-# generates a 256x256 "F" avatar to file:
-# default size is 600x600; other options are config parameters (see below)
-LetterAvatarSimple.generate_file("foobar", size: 256)
-=> #<File:/tmp/x20190527-19344-1ng4mku.png>
+# Generates a "JS" avatar to file:
+LetterAvatarSimple.generate_file("John Smith")
+# => #<File:/tmp/x20190527-19344-79m629.png>
 
-# you can specify the letters yourself directly if necessary. the second
-# param is hashed for use in certain color palettes to make color usage unique
+# You can specify the letters yourself directly if necessary by creating a
+# LetterAvatarSimple::Identity. The username will be hashed by certain color
+# palettes to make color choice different between users with the same initials
 i = LetterAvatarSimple::Identity.new("ZZ", "John Smith")
 LetterAvatarSimple.generate(i)
+
+# Other options that can be provided:
+LetterAvatarSimple.generate(
+  "foobar",
+  size: 256,                            # => default 600
+  palette: :i_want_hue,                 # => default :google
+  pointsize: 70,                        # => default 140
+  font: "/tmp/path/to/font/file",       # => default is path to included Roboto font
+  weight: 500,                          # => default 300
+  fill_color: "rgba(255, 255, 255, 1)", # => default "rgba(255, 255, 255, 0.65)"
+  annotate_position: "-0+10",           # => default "-0+5"
+  filename: "/tmp/foo.png",             # => default is randomly generated tempfile path
+)
 ```
 
 ## Installation
@@ -57,32 +71,56 @@ ImageMagick or GraphicsMagick - see
 
 ## Configuration
 
+The same options that can be passed to `generate` can be set as global defaults:
+
 ```ruby
 LetterAvatarSimple.config do |config|
-  config.fill_color        = 'rgba(255, 255, 255, 1)' # default is 'rgba(255, 255, 255, 0.65)'
-  config.colors_palette    = :iwanthue                # default is :google
-  config.weight            = 500                      # default is 300
-  config.annotate_position = '-0+10'                  # default is -0+5
-  config.letters_count     = 2                        # default is 1
-  config.pointsize         = 70                       # default is 140
+  config.size              = 256
+  config.palette           = :i_want_hue
+  config.pointsize         = 70
+  config.font              = "/tmp/path/to/font/file"
+  config.weight            = 500
+  config.fill_color        = "rgba(255, 255, 255, 1)"
+  config.annotate_position = "-0+10"
 end
 ```
 
-#### Color palette
+### Color palette
 
-We have three color palettes implemented: `iwanthue`, `google` and `custom`.
+Two color palettes are provided by default: `:google` and `:i_want_hue`
 
-Each of them have different colors, but the `iwanthue` also differently calculates the color for specified username.
+Each of them have different colors, but they also have different methods for
+choosing the color used for a given username's initials:
 
-The `google` selected will generate the same avatar for both, "Krzysiek" and "ksz2k" usernames given (both of them starts with letter "k"), but `iwanthue` will calculate it's md5 and then selects color, so there's huge chance that these usernames get different colors.
+`:google` will generate the same avatar for both "Krzysiek" and "ksz2k" as it
+looks at the first letter of the username, and they both start with "k".
 
-##### Custom palette definition
+`:i_want_hue` meanwhile calculates the MD5 digest of the username to select
+the color, so it's likely that two usernames with the same initial(s) will
+get different colors.
 
-You can define your own `custom` palette:
+#### Custom palettes
+
+You can add your own custom palette:
 
 ```ruby
-LetterAvatarSimple.config do |config|
-  config.colors_palette = :custom
-  config.custom_palette = [[120, 132, 205], [91, 149, 249], [72, 194, 249], [69, 208, 226]]
+LetterAvatarSimple.palettes[:my_palette] = LetterAvatarSimple::Palette.new([
+  [120, 132, 205],
+  [91, 149, 249],
+  [72, 194, 249],
+  [69, 208, 226],
+])
+# The default method of selecting the color is by MD5 digest of the username. You
+# can change this behavior by providing a letter_color method.
+LetterAvatarSimple.palettes[:my_palette].tap do |p|
+  def p.letter_color(identity)
+    if identity.id == "admin"
+      [255, 0, 0] # red
+    else
+      @palette.sample # random
+    end
+  end
 end
+
+LetterAvatarSimple.generate_file("foobar", palette: :my_palette)
 ```
