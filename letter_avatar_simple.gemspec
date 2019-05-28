@@ -7,7 +7,6 @@ Gem::Specification.new do |spec|
   spec.version       = LetterAvatarSimple::VERSION
   spec.authors       = ['Discourse Developers', 'Krzysiek Szczuka', 'Mateusz Mróz', 'Jason Lee', 'Abe Voelker']
   spec.email         = ['abe@abevoelker.com']
-  spec.description   = 'Generate letter image avatars based on user initials'
   spec.summary       = 'Generate letter image avatars based on user initials'
   spec.homepage      = 'https://github.com/abevoelker/letter_avatar_simple'
   spec.license       = 'GPL-2.0'
@@ -16,5 +15,5 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'mini_magick'
+  spec.add_runtime_dependency 'mini_magick', '~> 4.0'
 end
