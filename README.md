@@ -1,21 +1,34 @@
 # LetterAvatarSimple
 
-Forked from [letter_avatar][], which was
-in turn was extracted from [Discourse][].
+Generate letter image avatars based on user initials:
+
+```ruby
+LetterAvatarSimple.generate("foobar")
+# => #<StringIO:0x000055b3804948a8>
+```
+
+<img src="./examples/readme/F.png" alt='Image of letter "F"' width="64" height="64" />
+
+```ruby
+LetterAvatarSimple.generate("Dallas Smith")
+# => #<StringIO:0x000055b380e6a058>
+```
+
+<img src="./examples/readme/DS.png" alt='Image of letters "DS"' width="64" height="64" />
+
+Forked from [letter_avatar][], which was in turn extracted from [Discourse][].
 
 Compared to [letter_avatar][], this gem:
-  * Outputs `StringIO` binary data by default instead of writing files to
-    the `public` directory (but can write to temp files too) so you can use
-    [shrine][] or similar gems easier
-  * Uses [minimagick][] instead of
-    homegrown ImageMagick shell execution
+  * Outputs `StringIO` binary data by default (but can write to files too!)
+    instead of always writing files to the `public` directory. This way you can
+    use image upload gems like [shrine][] much easier
   * Supports keyword arguments for generating each image (don't need to edit
     global config or constants)
   * Simplifies custom palette loading and supports multiple custom palettes
+  * Uses [minimagick][] instead of homegrown ImageMagick shell execution
   * Does **not** come with model, view, or controller helpers (you should
     be using [shrine][])
-  * Does **not** do caching (you should be using
-    [shrine][])
+  * Does **not** do caching (you should be using [shrine][])
 
 ## Examples
 
@@ -30,18 +43,18 @@ Compared to [letter_avatar][], this gem:
 LetterAvatarSimple.generate("foobar")
 # => #<StringIO:0x000055b3804948a8>
 
-# Generates a "JS" avatar:
-LetterAvatarSimple.generate("John Smith")
+# Generates a "DS" avatar:
+LetterAvatarSimple.generate("Dallas Smith")
 # => #<StringIO:0x000055b380e6a058>
 
-# Generates a "JS" avatar to file:
-LetterAvatarSimple.generate_file("John Smith")
+# Generates a "DS" avatar to file:
+LetterAvatarSimple.generate_file("Dallas Smith")
 # => #<File:/tmp/x20190527-19344-79m629.png>
 
 # You can specify the letters yourself directly if necessary by creating a
 # LetterAvatarSimple::Identity. The username will be hashed by certain color
 # palettes to make color choice different between users with the same initials
-i = LetterAvatarSimple::Identity.new("ZZ", "John Smith")
+i = LetterAvatarSimple::Identity.new("ZZ", "Dallas Smith")
 LetterAvatarSimple.generate(i)
 
 # Other options that can be provided:
