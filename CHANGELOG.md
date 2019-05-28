@@ -1,3 +1,10 @@
+1.0.0
+-----
+
+- Public-ready release
+- Add color config option
+- Change some defaults
+
 0.9.1
 -----
 

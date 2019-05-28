@@ -59,7 +59,7 @@ LetterAvatarSimple.generate(i)
 
 ------------
 
-The default palette is based on Google Inbox. You can change palettes:
+The default palette is based on Google Inbox. We can change palettes:
 
 ```ruby
 LetterAvatarSimple.generate("foobar", palette: :i_want_hue)
@@ -108,6 +108,7 @@ Compared to [letter_avatar][], this gem:
   * Supports keyword arguments for generating each image (don't need to edit
     global config or constants)
   * Simplifies custom palette loading and supports multiple custom palettes
+  * Has some basic tests
   * Uses [minimagick][] instead of homegrown ImageMagick shell execution
   * Does **not** come with model, view, or controller helpers (you should
     be using [shrine][])
