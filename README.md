@@ -89,15 +89,13 @@ end
 
 Two color palettes are provided by default: `:google` and `:i_want_hue`
 
-Each of them have different colors, but they also have different methods for
-choosing the color used for a given username's initials:
+Both palettes use an MD5 digest of the username to select the color, so it's
+likely that two different usernames that share the same initial(s) will render
+with different colors.
 
-`:google` will generate the same avatar for both "Krzysiek" and "ksz2k" as it
-looks at the first letter of the username, and they both start with "k".
-
-`:i_want_hue` meanwhile calculates the MD5 digest of the username to select
-the color, so it's likely that two different usernames with the same initial(s)
-will  different colors.
+If you need the same initials to always render with the same color, simply
+provide a custom palette using a customized `letter_color` method. See below
+for an example.
 
 ### Custom palettes
 
@@ -116,8 +114,12 @@ LetterAvatarSimple.palettes[:my_palette].tap do |p|
   def p.letter_color(identity)
     if identity.id == "admin"
       [255, 0, 0] # red
-    else
+    elsif identity.id == "bozo"
       @palette.sample # random
+    else
+      # same initials = same color
+      digest = Digest::MD5.hexdigest(identity.letters.to_s)
+      @palette[digest[0...15].to_i(16) % @palette.length]
     end
   end
 end
