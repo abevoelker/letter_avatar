@@ -45,7 +45,7 @@ class LetterAvatarSimple
           idx = char.ord - 65
           @palette[idx]
         else
-          digest = Digest::MD5.hexdigest(identity.id)
+          digest = Digest::MD5.hexdigest(identity.id.to_s)
           @palette[digest[0...15].to_i(16) % @palette.length]
         end
       end

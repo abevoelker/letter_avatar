@@ -8,7 +8,7 @@ class LetterAvatarSimple
     end
 
     def letter_color(identity)
-      digest = Digest::MD5.hexdigest(identity.id)
+      digest = Digest::MD5.hexdigest(identity.id.to_s)
       @palette[digest[0...15].to_i(16) % @palette.length]
     end
   end
